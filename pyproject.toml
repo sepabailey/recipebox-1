@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "recipesbox"
+name = "qtr4"
 version = "0.1.0"
 description = ""
 authors = ["Earth <earthhadjo@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^3.0.5"
+django = "^3.0.6"
 
 [tool.poetry.dev-dependencies]
 
