@@ -2,10 +2,17 @@
 
 
 <ul> 
-    {% for foo in data %}
+    {% for recipe in recipes %}
         <li> 
-            <a href="/recipe/{{foo.id}}"> {{ foo.title }} </a>
+            <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a>
             
         </li>
     {% endfor %}
 </ul>
+<h3> 
+ <a href="/addrecipe/"> Add more goodness here  </a>
+  </h3>
+
+  <h3>
+ <a href="/addauthor/"> Go Here to add Human </a>
+ </h3>
