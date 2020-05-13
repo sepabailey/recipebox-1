@@ -9,7 +9,7 @@ urlpatterns = [
     path("recipe/<int:id>", views.recipe),
     path('login/', views.loginview),
     path('create_user/', views.create_user),
-    path('logout/', views.logout_view)
+    path('logout_view/', views.logout_view)
 
     # path('admin/', admin.site.urls),
 ]
