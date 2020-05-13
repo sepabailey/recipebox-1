@@ -71,19 +71,20 @@ def addrecipe(request):
 
 @login_required
 def addauthor(request):
-    html = "generic_form.html"
-    if request.method == "POST":
-        form = AddAuthorForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
+    if request.user.is_staff:
+        html = "generic_form.html"
+        if request.method == "POST":
+            form = AddAuthorForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
 
-            Author.objects.create(
-                user=request.user,
-                name=data['name'],
-                bio=data['bio']
+                Author.objects.create(
+                    user=request.user,
+                    name=data['name'],
+                    bio=data['bio']
 
-            )
-            return HttpResponseRedirect(reverse('homepage'))
+                )
+                return HttpResponseRedirect(reverse('homepage'))
     form = AddAuthorForm()
 
     return render(request, html, {'form': form})
