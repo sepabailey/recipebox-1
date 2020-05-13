@@ -12,9 +12,8 @@ class AddAuthorForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = [
-            'name'
+            'name', 'bio', 'user'
       ]
-
 
 class LoginForm(forms.Form):
   username = forms.CharField(max_length=50)
