@@ -1,4 +1,4 @@
-Original Author: Earth
+Original Author: Earth,
 Author: Sean Bailey, CoAuthors: Koren Nyles, Chris Wilson
 
 Most of the projects that we work on in corporate life is code that someone else wrote. Not only did someone else write it and start that project, for the grand majority of it, dozens of people (or more!) have touched the same code. MIT (and some of our partners here at Kenzie) identified the ability to work on someone else's code as one of the most important skills a new developer can have. After all, it's not necessary to always reinvent the wheel just because you don't like how the guy three hires ago wrote his classes!
