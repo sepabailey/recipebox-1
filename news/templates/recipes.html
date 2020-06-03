@@ -7,6 +7,13 @@
         <h2>Instructions</h2>
         <p> {{ recipe.instructions }}
         
-    
-</ul>  
+        </ul>  
+
+{%if request.user.is_authenticated%}
+{%if recipe not in current_author%}
+        <p><a href={% url 'favorite' id=recipe.id %}>Favorite</a></p>
+{%else%}
+        <p><a href={% url 'unfavorite' id=recipe.id %}>Unfavorite</a></p>
+{%endif%}
+{%endif%}
 <a href="/">Home</a>

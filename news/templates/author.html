@@ -1,12 +1,17 @@
-<h2> Recipes by {{author.name}}</h2>
-<p> {{author.bio}}
+<h2>Recipes by {{author.name}}</h2>
+<p>{{author.bio}}</p>
 <ul>
-    {% for recipe in recipes %}
-    <li>
-        <h3>
-            <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a>
-        </h3>
-    </li>
-    {% endfor %}
+  {% for recipe in recipes %}
+  <li>
+    <h3>
+      <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a>
+    </h3>
+  </li>
+  {% endfor %}
 </ul>
+<h2>My Favorites:</h2>
+{%for recipe in author.favorite.all%}
+<h4><a href = {%url 'recipe' id=recipe.id%}>{{recipe.title}}</a></h4>
+{%endfor%}
+
 <a href="/">Home</a>

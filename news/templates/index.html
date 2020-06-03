@@ -2,19 +2,17 @@
 
 Let's see if your checked in. {{ request.user.is_authenticated }}
 
-<ul> 
-    {% for recipe in recipes %}
-        <li> 
-            <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a>
-            
-        </li>
-    {% endfor %}
+<ul>
+  {% for recipe in recipes %}
+  <li>
+    <a href="/recipe/{{recipe.id}}"> {{ recipe.title }} </a>
+  </li>
+  {% endfor %}
 </ul>
-<h3> 
- <a href="/addrecipe/"> Add more goodness here  </a>
-  </h3>
+<h3>
+  <a href="/addrecipe/"> Add more goodness here </a>
+</h3>
 
- 
-<button> <a href="/addauthor/"> Go Here to add Human </a> </button> 
- 
-<button> <a href="/logout_view/"> Go Here to Logout </a> </button>
+<button><a href="/addauthor/"> Go Here to add Human </a></button>
+
+<button><a href="/logout_view/"> Go Here to Logout </a></button>

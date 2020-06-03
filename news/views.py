@@ -42,6 +42,8 @@ def create_user(request):
     return render(request, 'generic_form.html', {'form': form})
 
 
+# added login requirement so index is only visible when logged in
+@login_required
 def index(request):
     recipes = Recipe.objects.all()
     return render(request, 'index.html', {'recipes': recipes})
@@ -71,20 +73,25 @@ def addrecipe(request):
 
 @login_required
 def addauthor(request):
-    if request.user.is_staff:
-        html = "generic_form.html"
-        if request.method == "POST":
-            form = AddAuthorForm(request.POST)
-            if form.is_valid():
-                data = form.cleaned_data
+    # fixed bug with addauthor
+    html = "generic_form.html"
+    # if request.user.is_staff:
+    if request.method == "POST":
+        form = AddAuthorForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            new_user = User.objects.create_user(
+                username=data['username'],
+                password=data['password'],
+            )
+            new_author=Author.objects.create(
+                user=new_user,
+                name=data['name'],
+                bio=data['bio']
 
-                Author.objects.create(
-                    user=request.user,
-                    name=data['name'],
-                    bio=data['bio']
-
-                )
-                return HttpResponseRedirect(reverse('homepage'))
+            )
+            new_author.save()
+            return HttpResponseRedirect(reverse('homepage'))
     form = AddAuthorForm()
 
     return render(request, html, {'form': form})
@@ -98,12 +105,58 @@ def author(request, id):
 
 
 def recipe(request, id):
+    recipe = Recipe.objects.get(id=id)
+    if request.user.is_authenticated:
+        current_author = request.user.author.favorite.all()
+        return render(request, 'recipes.html', {'recipe': recipe, 'current_author': current_author})
+    return render(request, 'recipes.html', {'recipe': recipe})
 
-    recipes = Recipe.objects.get(id=id)
-    return render(request, 'recipes.html', {
-        'recipe': recipes})
+def favorite_view(request, id):
+    current_user = request.user.author
+    favorite_recipe = Recipe.objects.get(id=id)
+    current_user.favorite.add(favorite_recipe)
+    current_user.save()
+    # Matt helped me add f string to fix path that was breaking page
+    return HttpResponseRedirect(f'/recipe/{favorite_recipe.id}')
+
+
+def unfavorite_view(request, id):
+    current_user = request.user.author
+    favorite_recipe = Recipe.objects.get(id=id)
+    current_user.favorite.remove(favorite_recipe)
+    current_user.save()
+    # Matt helped me add f string to fix path that was breaking page
+    return HttpResponseRedirect(f'/recipe/{favorite_recipe.id}')
 
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('homepage'))
+    # Changed to login so when logout goes to login page
+    return HttpResponseRedirect(reverse('login'))
+
+
+def edit_recipe(request, id):
+    recipe = Recipe.objects.get(id=id)
+    if request.method == "POST":
+        form = AddRecipeForm(request.POST)
+        if request.user.author == recipe.author or request.user.is_staff:
+            if form.is_valid():
+                data = form.cleaned_data
+                recipe.title = data['title']
+                recipe.author = data['author']
+                recipe.description = data['description']
+                recipe.time_required = data['time_required']
+                recipe.instructions = data['instructions']
+                recipe.save()
+            return HttpResponseRedirect(reverse('recipe', args=(id,)))
+    form = AddRecipeForm(initial={
+        'title': recipe.title,
+        'author': recipe.author,
+        'description': recipe.description,
+        'time_required': recipe.time_required,
+        'instructions': recipe.instructions,
+    })
+    return render(request, 'generic_form.html', {'form': form})
+
+
+
